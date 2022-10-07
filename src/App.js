@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import './App.css';
 import Login from './pages/Login';
+import MainPage from './pages/MainPage';
+import Settings from './pages/Settings';
 
 class App extends Component {
   render() {
@@ -9,7 +11,8 @@ class App extends Component {
       <main className="App">
         <Switch>
           <Route exact path="/" component={ Login } />
-          {/* <Route path="/" component={  } /> */}
+          <Route path="/mainpage" component={ MainPage } />
+          <Route path="/settings" component={ Settings } />
           {/* <Route path="/formdisplay" component={ FormDataDisplay } /> */}
         </Switch>
       </main>
