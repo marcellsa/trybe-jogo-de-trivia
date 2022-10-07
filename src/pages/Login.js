@@ -23,9 +23,10 @@ class Login extends React.Component {
   };
 
   handleSubmit = () => {
-    const { dispatch } = this.props;
+    const { dispatch, history } = this.props;
     const { name, gravatarEmail } = this.state;
     dispatch(submitLogin(name, gravatarEmail));
+    history.push('/game');
   };
 
   render() {
