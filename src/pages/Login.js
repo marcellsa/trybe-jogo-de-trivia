@@ -28,6 +28,11 @@ class Login extends React.Component {
     dispatch(submitLogin(name, gravatarEmail));
   };
 
+  handleSettingsBtn = () => {
+    const { history } = this.props;
+    history.push('/settings');
+  };
+
   render() {
     const { isDisabled } = this.state;
     return (
@@ -54,6 +59,14 @@ class Login extends React.Component {
             onClick={ this.handleSubmit }
           >
             Play
+          </button>
+
+          <button
+            type="button"
+            data-testid="btn-settings"
+            onClick={ this.handleSettingsBtn }
+          >
+            Configurações
           </button>
         </form>
       </div>
