@@ -8,7 +8,7 @@ class Header extends Component {
 
     return (
       <section>
-        <img data-testid="header-profile-picture" src="https://www.freeiconspng.com/uploads/am-a-19-year-old-multimedia-artist-student-from-manila--21.png" alt={ name } />
+        <img data-testid="header-profile-picture" src="https://www.gravatar.com/avatar/c19ad9dbaf91c5533605fbf985177ccc" alt={ name } />
         <div data-testid="header-player-name">
           { name }
         </div>
