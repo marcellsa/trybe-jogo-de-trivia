@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Header from '../components/Header';
 
 class Game extends Component {
   state = {
@@ -70,6 +71,7 @@ class Game extends Component {
     }
     return (
       <section>
+        <Header />
         <div>
           <p data-testid="question-category">{category}</p>
           <p data-testid="question-text">{question}</p>
