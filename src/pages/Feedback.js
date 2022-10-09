@@ -1,42 +1,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { submitLogin } from '../redux/actions';
 
 class Feedback extends React.Component {
-  state = {
-    name: '',
-    gravatarEmail: '',
-    // emailInvalid: true,
-    // passwordInvalid: true,
-    isDisabled: true,
-  };
-
-  handleChange = ({ target }) => {
-    const { name, value } = target;
-    this.setState({ [name]: value }, () => this.verifyBtn());
-  };
-
-  verifyBtn = () => {
-    const { gravatarEmail, name } = this.state;
-    this.setState({ isDisabled: !(name.length > 0 && gravatarEmail.length > 0) });
+  displayFeeback = () => {
+    const { assertions } = this.props;
+    if (assertions > 2) {
+      return 'Well Done!';
+    }
+    return 'Could be better...';
   };
 
   render() {
-    const { isDisabled } = this.state;
     return (
-      <div className="App">
-        
+      <div>
+        <h1 data-testid="feedback-text">{ this.displayFeeback }</h1>
       </div>
+
     );
   }
 }
 
-Login.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func,
-  }).isRequired,
+const mapStateToProps = (state) => ({
+  assertions: state.player.assertions,
+});
+
+Feedback.propTypes = {
+  assertions: PropTypes.number.isRequired,
 };
 
-export default connect()(Feedback);
+export default connect(mapStateToProps, null)(Feedback);
