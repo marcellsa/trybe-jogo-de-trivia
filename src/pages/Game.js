@@ -85,9 +85,6 @@ class Game extends Component {
               ))
             }
           </div>
-          <Link to="/feedback">
-            <button type="button" data-testid="btn-next">Next</button>
-          </Link>
         </div>
       </section>
     );
