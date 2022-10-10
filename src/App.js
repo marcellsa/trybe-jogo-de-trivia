@@ -4,6 +4,7 @@ import './App.css';
 import Login from './pages/Login';
 import Settings from './pages/Settings';
 import Game from './pages/Game';
+import Feedback from './pages/Feedback';
 
 class App extends Component {
   render() {
@@ -12,6 +13,7 @@ class App extends Component {
         <Switch>
           <Route path="/game" component={ Game } />
           <Route exact path="/" component={ Login } />
+          <Route path="/feedback" component={ Feedback } />
           <Route path="/settings" component={ Settings } />
           {/* <Route path="/formdisplay" component={ FormDataDisplay } /> */}
         </Switch>
