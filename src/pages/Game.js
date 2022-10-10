@@ -9,6 +9,8 @@ class Game extends Component {
     fetching: true,
     selectedQuestion: {},
     answers: [],
+    timer: 30,
+
   };
 
   async componentDidMount() {
@@ -56,11 +58,29 @@ class Game extends Component {
   };
 
   render() {
-    const { selectedQuestion, fetching, answers } = this.state;
+    const {
+      selectedQuestion,
+      fetching,
+      answers,
+      timer,
+    } = this.state;
     const { category, question } = selectedQuestion;
+    const oneSecond = 1000;
+
+    const interval = setInterval(() => {
+      this.setState((prevState) => {
+        if (prevState.timer - 1 >= 0) {
+          return {
+            timer: prevState.timer - 1,
+          };
+        }
+      }, () => clearInterval(interval));
+    }, oneSecond);
+
     if (fetching) {
       return <h1>Loading...</h1>;
     }
+
     return (
       <section>
         <Header />
@@ -78,11 +98,16 @@ class Game extends Component {
                       ? 'correct-answer'
                       : `wrong-answer-${index}`
                   }
+                  disabled={ timer === 0 }
                 >
                   {answer}
                 </button>
               ))
             }
+          </div>
+          <div>
+            <p>Tempo restante:</p>
+            <span>{timer}</span>
           </div>
         </div>
       </section>
