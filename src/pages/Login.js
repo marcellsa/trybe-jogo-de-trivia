@@ -22,11 +22,25 @@ class Login extends React.Component {
     this.setState({ isDisabled: !(name.length > 0 && gravatarEmail.length > 0) });
   };
 
-  handleSubmit = () => {
+  handleSubmit = async () => {
     const { dispatch, history } = this.props;
     const { name, gravatarEmail } = this.state;
     dispatch(submitLogin(name, gravatarEmail));
-    history.push('/game');
+    const GET_TOKEN_ENDPOINT = 'https://opentdb.com/api_token.php?command=request';
+    const tokenResponse = await fetch(GET_TOKEN_ENDPOINT);
+    const { response_code: tokenResponseCode, token } = await tokenResponse.json();
+    if (tokenResponseCode === 0) {
+      localStorage.setItem('token', token);
+      history.push('/game');
+    } else {
+      this.badRequest();
+    }
+  };
+
+  badRequest = () => {
+    localStorage.removeItem('token');
+    const { history } = this.props;
+    history.push('/');
   };
 
   handleSettingsBtn = () => {
