@@ -12,38 +12,30 @@ class Game extends Component {
   };
 
   async componentDidMount() {
-    const GET_TOKEN_ENDPOINT = 'https://opentdb.com/api_token.php?command=request';
-    const tokenResponse = await fetch(GET_TOKEN_ENDPOINT);
-    const { response_code: tokenResponseCode, token } = await tokenResponse.json();
+    const token = localStorage.getItem('token');
+    const GET_QUESTIONS_ENDPOINT = `https://opentdb.com/api.php?amount=5&token=${token}`;
+    const questionResponse = await fetch(GET_QUESTIONS_ENDPOINT);
+    const {
+      results,
+      response_code: questionResponseCode,
+    } = await questionResponse.json();
+    if (questionResponseCode === 0) {
+      const { questionIndex } = this.state;
+      const selectedQuestion = results[questionIndex];
 
-    if (tokenResponseCode === 0) {
-      localStorage.setItem('token', token);
-      const GET_QUESTIONS_ENDPOINT = `https://opentdb.com/api.php?amount=5&token=${token}`;
-      const questionResponse = await fetch(GET_QUESTIONS_ENDPOINT);
       const {
-        results,
-        response_code: questionResponseCode,
-      } = await questionResponse.json();
-      if (questionResponseCode === 0) {
-        const { questionIndex } = this.state;
-        const selectedQuestion = results[questionIndex];
+        incorrect_answers: incorrectAnswers,
+        correct_answer: correctAnswer,
+      } = selectedQuestion;
 
-        const {
-          incorrect_answers: incorrectAnswers,
-          correct_answer: correctAnswer,
-        } = selectedQuestion;
-
-        const answers = [...incorrectAnswers, correctAnswer];
-        this.shuffleAnswers(answers);
-        this.setState({
-          // listOfQuestions: results,
-          fetching: false,
-          selectedQuestion,
-          answers,
-        });
-      } else {
-        this.badRequest();
-      }
+      const answers = [...incorrectAnswers, correctAnswer];
+      this.shuffleAnswers(answers);
+      this.setState({
+      // listOfQuestions: results,
+        fetching: false,
+        selectedQuestion,
+        answers,
+      });
     } else {
       this.badRequest();
     }
