@@ -9,7 +9,7 @@ class Game extends Component {
     fetching: true,
     selectedQuestion: {},
     answers: [],
-    timer: 30,
+    countdown: 30,
 
   };
 
@@ -32,6 +32,7 @@ class Game extends Component {
 
       const answers = [...incorrectAnswers, correctAnswer];
       this.shuffleAnswers(answers);
+      this.startTimer();
       this.setState({
       // listOfQuestions: results,
         fetching: false,
@@ -49,6 +50,21 @@ class Game extends Component {
     history.push('/');
   };
 
+  startTimer = () => {
+    const ONE_SECOND = 1000;
+
+    setInterval(() => {
+      this.setState((prevState) => {
+        const { countdown } = prevState;
+        if (countdown - 1 >= 0) {
+          return {
+            countdown: countdown - 1,
+          };
+        }
+      });
+    }, ONE_SECOND);
+  };
+
   shuffleAnswers = (array) => {
     // ref https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
     for (let index = array.length - 1; index > 0; index -= index) {
@@ -62,21 +78,9 @@ class Game extends Component {
       selectedQuestion,
       fetching,
       answers,
-      timer,
+      countdown,
     } = this.state;
     const { category, question } = selectedQuestion;
-    const oneSecond = 1000;
-
-    const interval = setInterval(() => {
-      this.setState((prevState) => {
-        if (prevState.timer - 1 >= 0) {
-          return {
-            timer: prevState.timer - 1,
-          };
-        }
-      }, () => clearInterval(interval));
-    }, oneSecond);
-
     if (fetching) {
       return <h1>Loading...</h1>;
     }
@@ -98,7 +102,7 @@ class Game extends Component {
                       ? 'correct-answer'
                       : `wrong-answer-${index}`
                   }
-                  disabled={ timer === 0 }
+                  disabled={ countdown === 0 }
                 >
                   {answer}
                 </button>
@@ -107,7 +111,7 @@ class Game extends Component {
           </div>
           <div>
             <p>Tempo restante:</p>
-            <span>{timer}</span>
+            <span>{countdown}</span>
           </div>
         </div>
       </section>
