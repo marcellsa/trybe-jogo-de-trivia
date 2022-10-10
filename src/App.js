@@ -11,8 +11,8 @@ class App extends Component {
     return (
       <main className="App">
         <Switch>
-          <Route path="/game" component={ Game } />
           <Route exact path="/" component={ Login } />
+          <Route path="/game" component={ Game } />
           <Route path="/feedback" component={ Feedback } />
           <Route path="/settings" component={ Settings } />
           {/* <Route path="/formdisplay" component={ FormDataDisplay } /> */}
