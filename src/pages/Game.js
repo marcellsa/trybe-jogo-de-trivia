@@ -46,7 +46,7 @@ class Game extends Component {
         return {
           answerTriggered: false,
           questionIndex: nextQuestionIndex,
-          selectedQuestion: listOfQuestions[nextQuestionIndex],
+          selectedQuestion: nextQuestion,
           answers,
         };
       });
