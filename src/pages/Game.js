@@ -10,7 +10,6 @@ class Game extends Component {
     fetching: true,
     selectedQuestion: {},
     answers: [],
-    color: false,
   };
 
   async componentDidMount() {
@@ -49,11 +48,6 @@ class Game extends Component {
     history.push('/');
   };
 
-  changeColor = () => {
-    this.setState({
-      color: true });
-  };
-
   shuffleAnswers = (array) => {
     // ref https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
     for (let index = array.length - 1; index > 0; index -= index) {
@@ -63,7 +57,7 @@ class Game extends Component {
   };
 
   render() {
-    const { selectedQuestion, fetching, answers, color } = this.state;
+    const { selectedQuestion, fetching, answers } = this.state;
     const { category, question } = selectedQuestion;
     if (fetching) {
       return <h1>Loading...</h1>;

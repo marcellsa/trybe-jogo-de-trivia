@@ -95,11 +95,10 @@ describe('Testa pagina de Login', () => {
     const inputEmail = screen.getByPlaceholderText(/Email/i);
     const inputName = screen.getByPlaceholderText(/name/i);
     const btnPlay = screen.getByTestId('btn-play');
+    userEvent.type(inputEmail, emailTest);
+    userEvent.type(inputName, name);
     userEvent.click(btnPlay);
     const { location: { pathname } } = history;
-    setTimeout(() => {
     expect(pathname).toBe('/');
-  }, 3000);
-
   })
 })
