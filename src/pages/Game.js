@@ -4,13 +4,13 @@ import Header from '../components/Header';
 
 class Game extends Component {
   state = {
-    // listOfQuestions: [],
+    listOfQuestions: [],
     questionIndex: 0,
     fetching: true,
     selectedQuestion: {},
     answers: [],
     countdown: 30,
-
+    answerTriggered: false,
   };
 
   async componentDidMount() {
@@ -24,17 +24,11 @@ class Game extends Component {
     if (questionResponseCode === 0) {
       const { questionIndex } = this.state;
       const selectedQuestion = results[questionIndex];
-
-      const {
-        incorrect_answers: incorrectAnswers,
-        correct_answer: correctAnswer,
-      } = selectedQuestion;
-
-      const answers = [...incorrectAnswers, correctAnswer];
-      this.shuffleAnswers(answers);
       this.startTimer();
+      const answers = this.shuffleAnswers(selectedQuestion);
+
       this.setState({
-      // listOfQuestions: results,
+        listOfQuestions: results,
         fetching: false,
         selectedQuestion,
         answers,
@@ -43,6 +37,24 @@ class Game extends Component {
       this.badRequest();
     }
   }
+
+  changeQuestion = () => {
+    const { listOfQuestions, questionIndex } = this.state;
+    if (questionIndex + 1 < listOfQuestions.length) {
+      this.setState((prevState) => {
+        const { questionIndex: prevQuestionIndex } = prevState;
+        const nextQuestionIndex = prevQuestionIndex + 1;
+        const nextQuestion = listOfQuestions[nextQuestionIndex];
+        const answers = this.shuffleAnswers(nextQuestion);
+        return {
+          answerTriggered: false,
+          questionIndex: nextQuestionIndex,
+          selectedQuestion: nextQuestion,
+          answers,
+        };
+      });
+    }
+  };
 
   badRequest = () => {
     localStorage.removeItem('token');
@@ -65,12 +77,20 @@ class Game extends Component {
     }, ONE_SECOND);
   };
 
-  shuffleAnswers = (array) => {
+  shuffleAnswers = (question) => {
+    const {
+      incorrect_answers: incorrectAnswers,
+      correct_answer: correctAnswer,
+    } = question;
+    const answers = [...incorrectAnswers, correctAnswer];
+
     // ref https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
-    for (let index = array.length - 1; index > 0; index -= index) {
+    for (let index = answers.length - 1; index > 0; index -= index) {
       const randomIndex = Math.floor(Math.random() * (index + 1));
-      [array[index], array[randomIndex]] = [array[randomIndex], array[index]];
+      [answers[index], answers[randomIndex]] = [answers[randomIndex], answers[index]];
     }
+
+    return answers;
   };
 
   render() {
@@ -103,6 +123,8 @@ class Game extends Component {
                       : `wrong-answer-${index}`
                   }
                   disabled={ countdown === 0 }
+                  onClick={ () => this.setState({ answerTriggered: true }) }
+
                 >
                   {answer}
                 </button>
@@ -113,6 +135,17 @@ class Game extends Component {
             <p>Tempo restante:</p>
             <span>{countdown}</span>
           </div>
+          {
+            answerTriggered && (
+              <button
+                type="button"
+                data-testid="btn-next"
+                onClick={ this.changeQuestion }
+              >
+                Next
+              </button>
+            )
+          }
         </div>
       </section>
     );
