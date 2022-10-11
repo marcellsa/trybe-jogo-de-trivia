@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
+import style from './game.module.css';
 
 class Game extends Component {
   state = {
@@ -123,9 +124,14 @@ class Game extends Component {
                       ? 'correct-answer'
                       : `wrong-answer-${index}`
                   }
+                  className={
+                    answerTriggered && (selectedQuestion.correct_answer === answer
+                      ? style.green : style.red)
+                  }
                   disabled={ countdown === 0 }
-                  onClick={ () => this.setState({ answerTriggered: true }) }
-
+                  onClick={ () => this.setState({
+                    answerTriggered: true,
+                  }) }
                 >
                   {answer}
                 </button>
