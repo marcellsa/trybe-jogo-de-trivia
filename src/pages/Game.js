@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import Header from '../components/Header';
 import style from './game.module.css';
+import { setScore } from '../redux/actions';
 
 class Game extends Component {
   state = {
@@ -12,6 +14,7 @@ class Game extends Component {
     answers: [],
     countdown: 30,
     answerTriggered: false,
+    currentScore: null,
   };
 
   async componentDidMount() {
@@ -42,6 +45,10 @@ class Game extends Component {
   changeQuestion = () => {
     const { listOfQuestions, questionIndex } = this.state;
     if (questionIndex + 1 < listOfQuestions.length) {
+      // A cada nova pergunta o temporizador deve ser reiniciado
+      this.setState({ countdown: 30 });
+      clearInterval(this.idStartTime);
+      this.startTimer();
       this.setState((prevState) => {
         const { questionIndex: prevQuestionIndex } = prevState;
         const nextQuestionIndex = prevQuestionIndex + 1;
@@ -54,6 +61,10 @@ class Game extends Component {
           answers,
         };
       });
+    } else {
+      // o botão “Next” deve redirecionar a pessoa para a tela de Feedback
+      const { history } = this.props;
+      history.push('/feedback');
     }
   };
 
@@ -66,7 +77,7 @@ class Game extends Component {
   startTimer = () => {
     const ONE_SECOND = 1000;
 
-    setInterval(() => {
+    this.idStartTime = setInterval(() => {
       this.setState((prevState) => {
         const { countdown } = prevState;
         if (countdown - 1 >= 0) {
@@ -92,6 +103,44 @@ class Game extends Component {
     }
 
     return answers;
+  };
+
+  questionAnswered = ({ target }) => {
+    const { selectedQuestion } = this.state;
+    const correctAnswer = selectedQuestion.correct_answer;
+    const chosenAnswer = target.innerText;
+
+    if (correctAnswer === chosenAnswer) {
+      const { countdown } = this.state;
+      const { difficulty } = selectedQuestion;
+      const DEFAULT_POINTS_TO_SUM = 10;
+      const EASY_POINTS = 1;
+      const MEDIUM_POINTS = 2;
+      const HARD_POINTS = 3;
+      let difficultyPoints = null;
+      switch (difficulty) {
+      case 'hard':
+        difficultyPoints = HARD_POINTS;
+        break;
+      case 'medium':
+        difficultyPoints = MEDIUM_POINTS;
+        break;
+      default:
+        difficultyPoints = EASY_POINTS;
+        break;
+      }
+
+      const score = DEFAULT_POINTS_TO_SUM + (countdown * difficultyPoints);
+      this.setState((prevState) => ({
+        currentScore: prevState.currentScore + score,
+      }), () => {
+        const { currentScore } = this.state;
+        const { dispatch } = this.props;
+        dispatch(setScore(currentScore));
+      });
+    }
+
+    this.setState({ answerTriggered: true });
   };
 
   render() {
@@ -129,9 +178,7 @@ class Game extends Component {
                       ? style.green : style.red)
                   }
                   disabled={ countdown === 0 }
-                  onClick={ () => this.setState({
-                    answerTriggered: true,
-                  }) }
+                  onClick={ this.questionAnswered }
                 >
                   {answer}
                 </button>
@@ -163,6 +210,7 @@ Game.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
-export default Game;
+export default connect()(Game);
