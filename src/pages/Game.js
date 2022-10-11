@@ -97,14 +97,13 @@ class Game extends Component {
   };
 
   questionAnswered = ({ target }) => {
-    const { listOfQuestions, questionIndex } = this.state;
-    const question = listOfQuestions[questionIndex];
-    const correctAnswer = question.correct_answer;
+    const { selectedQuestion } = this.state;
+    const correctAnswer = selectedQuestion.correct_answer;
     const chosenAnswer = target.innerText;
 
     if (correctAnswer === chosenAnswer) {
       const { countdown } = this.state;
-      const { difficulty } = question;
+      const { difficulty } = selectedQuestion;
       const DEFAULT_POINTS_TO_SUM = 10;
       const EASY_POINTS = 1;
       const MEDIUM_POINTS = 2;
