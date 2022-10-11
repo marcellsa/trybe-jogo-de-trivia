@@ -19,6 +19,11 @@ function player(state = INITIAL_STATE_LOGIN, action) {
       ...state,
       score: action.payload,
     };
+  case 'SET_ASSERTIONS':
+    return {
+      ...state,
+      assertions: action.payload,
+    };
   default:
     return state;
   }
