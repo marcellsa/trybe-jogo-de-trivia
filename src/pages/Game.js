@@ -9,6 +9,7 @@ class Game extends Component {
     fetching: true,
     selectedQuestion: {},
     answers: [],
+    countdown: 30,
     answerTriggered: false,
   };
 
@@ -23,7 +24,9 @@ class Game extends Component {
     if (questionResponseCode === 0) {
       const { questionIndex } = this.state;
       const selectedQuestion = results[questionIndex];
+      this.startTimer();
       const answers = this.shuffleAnswers(selectedQuestion);
+
       this.setState({
         listOfQuestions: results,
         fetching: false,
@@ -59,12 +62,28 @@ class Game extends Component {
     history.push('/');
   };
 
+  startTimer = () => {
+    const ONE_SECOND = 1000;
+
+    setInterval(() => {
+      this.setState((prevState) => {
+        const { countdown } = prevState;
+        if (countdown - 1 >= 0) {
+          return {
+            countdown: countdown - 1,
+          };
+        }
+      });
+    }, ONE_SECOND);
+  };
+
   shuffleAnswers = (question) => {
     const {
       incorrect_answers: incorrectAnswers,
       correct_answer: correctAnswer,
     } = question;
     const answers = [...incorrectAnswers, correctAnswer];
+
     // ref https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
     for (let index = answers.length - 1; index > 0; index -= index) {
       const randomIndex = Math.floor(Math.random() * (index + 1));
@@ -75,11 +94,18 @@ class Game extends Component {
   };
 
   render() {
-    const { selectedQuestion, fetching, answers, answerTriggered } = this.state;
+    const {
+      selectedQuestion,
+      fetching,
+      answers,
+      countdown,
+      answerTriggered,
+    } = this.state;
     const { category, question } = selectedQuestion;
     if (fetching) {
       return <h1>Loading...</h1>;
     }
+
     return (
       <section>
         <Header />
@@ -97,12 +123,18 @@ class Game extends Component {
                       ? 'correct-answer'
                       : `wrong-answer-${index}`
                   }
+                  disabled={ countdown === 0 }
                   onClick={ () => this.setState({ answerTriggered: true }) }
+
                 >
                   {answer}
                 </button>
               ))
             }
+          </div>
+          <div>
+            <p>Tempo restante:</p>
+            <span>{countdown}</span>
           </div>
           {
             answerTriggered && (
@@ -115,7 +147,6 @@ class Game extends Component {
               </button>
             )
           }
-
         </div>
       </section>
     );
