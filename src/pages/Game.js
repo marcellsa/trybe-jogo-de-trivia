@@ -41,6 +41,10 @@ class Game extends Component {
   changeQuestion = () => {
     const { listOfQuestions, questionIndex } = this.state;
     if (questionIndex + 1 < listOfQuestions.length) {
+      // A cada nova pergunta o temporizador deve ser reiniciado
+      this.setState({ countdown: 30 });
+      clearInterval(this.idStartTime);
+      this.startTimer();
       this.setState((prevState) => {
         const { questionIndex: prevQuestionIndex } = prevState;
         const nextQuestionIndex = prevQuestionIndex + 1;
@@ -53,6 +57,10 @@ class Game extends Component {
           answers,
         };
       });
+    } else {
+      // o botão “Next” deve redirecionar a pessoa para a tela de Feedback
+      const { history } = this.props;
+      history.push('/feedback');
     }
   };
 
@@ -65,7 +73,7 @@ class Game extends Component {
   startTimer = () => {
     const ONE_SECOND = 1000;
 
-    setInterval(() => {
+    this.idStartTime = setInterval(() => {
       this.setState((prevState) => {
         const { countdown } = prevState;
         if (countdown - 1 >= 0) {
