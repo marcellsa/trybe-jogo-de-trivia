@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import Header from '../components/Header';
 
 class Feedback extends React.Component {
   displayFeeback = (assertions) => {
@@ -15,6 +16,7 @@ class Feedback extends React.Component {
     const feedbackMessage = this.displayFeeback(assertions);
     return (
       <div>
+        <Header />
         <h1 data-testid="feedback-text">{ feedbackMessage }</h1>
         <h2 data-testid="feedback-total-score">
           Pontução:
