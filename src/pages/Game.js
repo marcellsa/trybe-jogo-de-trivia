@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Header from '../components/Header';
+import style from './game.module.css';
 import { setScore } from '../redux/actions';
 
 class Game extends Component {
@@ -171,6 +172,10 @@ class Game extends Component {
                     answer === selectedQuestion.correct_answer
                       ? 'correct-answer'
                       : `wrong-answer-${index}`
+                  }
+                  className={
+                    answerTriggered && (selectedQuestion.correct_answer === answer
+                      ? style.green : style.red)
                   }
                   disabled={ countdown === 0 }
                   onClick={ this.questionAnswered }
