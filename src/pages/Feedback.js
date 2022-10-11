@@ -18,15 +18,15 @@ class Feedback extends React.Component {
       <div>
         <Header />
         <h1 data-testid="feedback-text">{ feedbackMessage }</h1>
-        <h2 data-testid="feedback-total-score">
+        <h2>
           Pontução:
           {' '}
-          { score }
+          <span data-testid="feedback-total-score">{ score }</span>
         </h2>
-        <h2 data-testid="feedback-total-question">
+        <h2>
           Numero de acertos:
           {' '}
-          { assertions }
+          <span data-testid="feedback-total-question">{ assertions }</span>
         </h2>
       </div>
 

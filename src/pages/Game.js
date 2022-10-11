@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Header from '../components/Header';
 import style from './game.module.css';
-import { setScore } from '../redux/actions';
+import { setScore, setAssertions } from '../redux/actions';
 
 class Game extends Component {
   state = {
@@ -15,6 +15,7 @@ class Game extends Component {
     countdown: 30,
     answerTriggered: false,
     currentScore: null,
+    assertions: null,
   };
 
   async componentDidMount() {
@@ -133,9 +134,11 @@ class Game extends Component {
       const score = DEFAULT_POINTS_TO_SUM + (countdown * difficultyPoints);
       this.setState((prevState) => ({
         currentScore: prevState.currentScore + score,
+        assertions: prevState.assertions + 1,
       }), () => {
-        const { currentScore } = this.state;
+        const { currentScore, assertions } = this.state;
         const { dispatch } = this.props;
+        dispatch(setAssertions(assertions));
         dispatch(setScore(currentScore));
       });
     }
