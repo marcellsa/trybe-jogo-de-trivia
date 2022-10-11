@@ -99,6 +99,7 @@ class Game extends Component {
       fetching,
       answers,
       countdown,
+      answerTriggered,
     } = this.state;
     const { category, question } = selectedQuestion;
     if (fetching) {
