@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
+import './game.css';
 
 class Game extends Component {
   state = {
@@ -9,6 +10,7 @@ class Game extends Component {
     fetching: true,
     selectedQuestion: {},
     answers: [],
+    color: false,
   };
 
   async componentDidMount() {
@@ -47,6 +49,11 @@ class Game extends Component {
     history.push('/');
   };
 
+  changeColor = () => {
+    this.setState({
+      color: true });
+  };
+
   shuffleAnswers = (array) => {
     // ref https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
     for (let index = array.length - 1; index > 0; index -= index) {
@@ -56,7 +63,7 @@ class Game extends Component {
   };
 
   render() {
-    const { selectedQuestion, fetching, answers } = this.state;
+    const { selectedQuestion, fetching, answers, color } = this.state;
     const { category, question } = selectedQuestion;
     if (fetching) {
       return <h1>Loading...</h1>;
@@ -73,6 +80,7 @@ class Game extends Component {
                 <button
                   key={ index }
                   type="button"
+                  onClick={ this.changeColor }
                   data-testid={
                     answer === selectedQuestion.correct_answer
                       ? 'correct-answer'
