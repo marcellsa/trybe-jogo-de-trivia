@@ -11,6 +11,11 @@ class Feedback extends React.Component {
     return 'Could be better...';
   };
 
+  handlePlayAgainBtn = () => {
+    const { history } = this.props;
+    history.push('/');
+  };
+
   render() {
     const { score, assertions } = this.props;
     const feedbackMessage = this.displayFeeback(assertions);
@@ -28,6 +33,14 @@ class Feedback extends React.Component {
           {' '}
           <span data-testid="feedback-total-question">{ assertions }</span>
         </h2>
+
+        <button
+          data-testid="btn-play-again"
+          onClick={ this.handlePlayAgainBtn }
+          type="button"
+        >
+          Play Again
+        </button>
       </div>
 
     );
@@ -42,6 +55,9 @@ const mapStateToProps = (state) => ({
 Feedback.propTypes = {
   assertions: PropTypes.number.isRequired,
   score: PropTypes.number.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
 };
 
 export default connect(mapStateToProps, null)(Feedback);
