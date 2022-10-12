@@ -146,6 +146,7 @@ class Game extends Component {
     this.setState({ answerTriggered: true });
   };
 
+  // comentario
   render() {
     const {
       selectedQuestion,
