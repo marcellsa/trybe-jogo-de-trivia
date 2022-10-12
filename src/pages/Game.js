@@ -171,6 +171,7 @@ class Game extends Component {
                 <button
                   key={ index }
                   type="button"
+                  onClick={ this.changeColor }
                   data-testid={
                     answer === selectedQuestion.correct_answer
                       ? 'correct-answer'
