@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 
 class Feedback extends React.Component {
@@ -9,11 +10,6 @@ class Feedback extends React.Component {
       return 'Well Done!';
     }
     return 'Could be better...';
-  };
-
-  handlePlayAgainBtn = () => {
-    const { history } = this.props;
-    history.push('/');
   };
 
   render() {
@@ -33,14 +29,22 @@ class Feedback extends React.Component {
           {' '}
           <span data-testid="feedback-total-question">{ assertions }</span>
         </h2>
-
-        <button
-          data-testid="btn-play-again"
-          onClick={ this.handlePlayAgainBtn }
-          type="button"
-        >
-          Play Again
-        </button>
+        <Link to="/">
+          <button
+            data-testid="btn-play-again"
+            type="button"
+          >
+            Play Again
+          </button>
+        </Link>
+        <Link to="/ranking">
+          <button
+            data-testid="btn-ranking"
+            type="button"
+          >
+            Ranking
+          </button>
+        </Link>
       </div>
 
     );

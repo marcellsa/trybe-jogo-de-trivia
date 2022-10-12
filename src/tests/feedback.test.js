@@ -3,6 +3,7 @@ import { screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { renderWithRouterAndRedux } from './helpers/renderWithRouterAndRedux';
 import Feedback from '../pages/Feedback';
+import userEvent from '@testing-library/user-event';
 
 describe('Testa pagina de Login', () => {
   test('Verifica se os campos de feedback estão presentes na tela', () => {
@@ -24,5 +25,12 @@ describe('Testa pagina de Login', () => {
     renderWithRouterAndRedux(<Feedback />, { player: { name: 'rafael', assertions: 3 , score: 100 } });
     const feedbackMessage = screen.getByText('Well Done!');
     expect(feedbackMessage).toBeInTheDocument();
+  })
+  test('Verifica se ao apertar play again voltamos para tela inicial', () => {
+    const { history } = renderWithRouterAndRedux(<Feedback />);
+    const playAgainButton = screen.getByTestId('btn-play-again')
+    userEvent.click(playAgainButton)
+    const { pathname } = history.location;
+    expect(pathname).toBe('/');
   })
 })
