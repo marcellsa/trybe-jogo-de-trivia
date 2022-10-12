@@ -14,10 +14,10 @@ class Header extends Component {
         <div data-testid="header-player-name">
           { name }
         </div>
-        <div data-testid="header-score">
+        <div>
           Pontos:
           {' '}
-          {score}
+          <span data-testid="header-score">{score}</span>
         </div>
       </section>
     );
@@ -32,7 +32,7 @@ const mapStateToProps = (state) => ({
 
 Header.propTypes = {
   name: PropTypes.string.isRequired,
-  score: PropTypes.string.isRequired,
+  score: PropTypes.number.isRequired,
   gravatarEmail: PropTypes.string.isRequired,
 };
 

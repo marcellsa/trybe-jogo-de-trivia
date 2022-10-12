@@ -4,7 +4,12 @@ export const submitLogin = (name, gravatarEmail) => ({
   gravatarEmail,
 });
 
-export const xxxx = (xx) => ({
-  type: '',
-  xx,
+export const setScore = (payload) => ({
+  type: 'SET_SCORE',
+  payload,
+});
+
+export const setAssertions = (payload) => ({
+  type: 'SET_ASSERTIONS',
+  payload,
 });
